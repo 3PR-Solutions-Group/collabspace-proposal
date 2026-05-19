@@ -20,7 +20,7 @@
       background: rgba(10,10,10,0.9); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
+    .nav-logo { font-size: 1.3rem; text-decoration: none; color: var(--white); font-weight: 800; letter-spacing: -0.03em; }
     .nav-logo span { color: var(--accent); }
     .nav-actions { display: flex; gap: 1rem; align-items: center; }
     .nav-link { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
@@ -135,13 +135,16 @@
 </head>
 <body>
   <nav>
-    <div class="nav-logo">collab<span>d</span></div>
-    <div class="nav-actions">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="dashboard.html" class="nav-link">Dashboard</a>
-      <a href="onboarding.html" class="btn-nav">Join free</a>
-    </div>
-  </nav>
+  <a class="nav-logo" href="index.html" style="text-decoration:none;color:var(--white)">Collab<span>d</span></a>
+  <div class="nav-links">
+    <a href="explore.html">Discover</a>
+    <a href="collab-day.html">Collabs</a>
+    <a href="venues.html">Venues</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="messaging.html">Messages</a>
+  </div>
+  <a href="onboarding.html" class="nav-cta">Get Verified</a>
+</nav>
 
   <div class="explore-wrap">
     <div class="explore-header">

@@ -191,11 +191,17 @@
     <a class="nav-item" href="explore.html">
       <span class="icon">🔭</span> Discover
     </a>
-    <a class="nav-item" href="#">
-      <span class="icon">📅</span> Bookings
-      <span class="nav-badge">3</span>
+    <a class="nav-item" href="collab-day.html">
+      <span class="icon">📅</span> Collab Days
+      <span class="nav-badge">2</span>
     </a>
-    <a class="nav-item" href="#">
+    <a class="nav-item" href="venues.html">
+      <span class="icon">🏠</span> Venues
+    </a>
+    <a class="nav-item" href="marketplace.html">
+      <span class="icon">👗</span> Marketplace
+    </a>
+    <a class="nav-item" href="messaging.html">
       <span class="icon">💬</span> Messages
       <span class="nav-badge">5</span>
     </a>
@@ -206,6 +212,9 @@
     </a>
     <a class="nav-item" href="profile.html">
       <span class="icon">👤</span> My Profile
+    </a>
+    <a class="nav-item" href="agency.html">
+      <span class="icon">🏢</span> My Agency
     </a>
     <a class="nav-item" href="#">
       <span class="icon">⚙️</span> Settings
@@ -409,6 +418,90 @@
         </div>
       </div>
     </div>
+
+    <!-- New widgets row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;margin-top:1.5rem">
+      <!-- Upcoming Collabs widget -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">My Upcoming Collabs</div>
+          <a href="collab-day.html" class="section-link">View all →</a>
+        </div>
+        <div class="booking-item">
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#6C63FF,#FF6584);border-radius:8px">📅</div>
+          <div class="booking-info">
+            <div class="booking-name">Luxe Studio Mayfair</div>
+            <div class="booking-detail">14 Jul · 3 creators · Boudoir</div>
+          </div>
+          <div class="booking-right">
+            <div class="amount">£150</div>
+            <div class="booking-status status-confirmed">Confirmed</div>
+          </div>
+        </div>
+        <div class="booking-item">
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#43E8AC,#6C63FF);border-radius:8px">📅</div>
+          <div class="booking-info">
+            <div class="booking-name">The Manor House</div>
+            <div class="booking-detail">3 Aug · 5 creators · Fine Art</div>
+          </div>
+          <div class="booking-right">
+            <div class="amount">£240</div>
+            <div class="booking-status status-pending">Pending</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Cert Status widget -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Health Cert Status</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:0.5rem 0">
+          <div style="width:48px;height:48px;border-radius:12px;background:rgba(67,232,172,0.15);border:1px solid rgba(67,232,172,0.3);display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0">🏥</div>
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:0.3rem;background:rgba(67,232,172,0.12);color:var(--accent3);border:1px solid rgba(67,232,172,0.3);border-radius:100px;padding:0.25rem 0.65rem;font-size:0.72rem;font-weight:700;margin-bottom:0.4rem">✓ BASHH Verified</div>
+            <div style="font-size:0.82rem;font-weight:600">Valid until 15 Aug 2026</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.15rem">422 days remaining</div>
+          </div>
+        </div>
+        <a href="#" class="btn-sm" style="display:block;text-align:center;margin-top:1rem;text-decoration:none;border-radius:6px;background:rgba(255,255,255,0.06);color:var(--white);font-size:0.78rem">Renew Certificate</a>
+      </div>
+
+      <!-- Collab Requests widget -->
+      <div class="section-card">
+        <div class="section-head">
+          <div class="section-title">Collab Requests</div>
+          <a href="collab-day.html" class="section-link">Manage →</a>
+        </div>
+        <div class="booking-item">
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#FF6584,#43E8AC)">SV</div>
+          <div class="booking-info">
+            <div class="booking-name">Sofia Valentina</div>
+            <div class="booking-detail">Wants to join: Luxe Studio 14 Jul</div>
+          </div>
+          <div class="booking-right">
+            <div style="display:flex;gap:0.4rem">
+              <button style="background:rgba(67,232,172,0.15);border:1px solid rgba(67,232,172,0.3);color:var(--accent3);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;cursor:pointer;font-family:'Inter',sans-serif">✓</button>
+              <button style="background:rgba(255,101,132,0.12);border:1px solid rgba(255,101,132,0.25);color:var(--accent2);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;cursor:pointer;font-family:'Inter',sans-serif">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="booking-item">
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#6C63FF,#43E8AC)">JP</div>
+          <div class="booking-info">
+            <div class="booking-name">Jade Park</div>
+            <div class="booking-detail">Wants to join: Manor House 3 Aug</div>
+          </div>
+          <div class="booking-right">
+            <div style="display:flex;gap:0.4rem">
+              <button style="background:rgba(67,232,172,0.15);border:1px solid rgba(67,232,172,0.3);color:var(--accent3);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;cursor:pointer;font-family:'Inter',sans-serif">✓</button>
+              <button style="background:rgba(255,101,132,0.12);border:1px solid rgba(255,101,132,0.25);color:var(--accent2);padding:0.2rem 0.6rem;border-radius:6px;font-size:0.72rem;cursor:pointer;font-family:'Inter',sans-serif">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <script>
