@@ -75,11 +75,17 @@
 
     @media (max-width: 768px) {
       nav { padding: 1rem 1.25rem; }
-      .nav-links { display: none; }
+      .nav-hamburger { display: block; }
+      .nav-links { display: none !important; }
+      .nav-user { display: none; }
       .conv-list { width: 100%; border-right: none; display: none; }
       .conv-list.mobile-show { display: flex; }
+      .chat-panel { display: none; }
+      .chat-panel.mobile-show { display: flex; }
       .thread-panel { width: 100%; }
     }
+  
+    .nav-hamburger { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; padding: 0.25rem 0.5rem; line-height: 1; }
   </style>
 </head>
 <body>

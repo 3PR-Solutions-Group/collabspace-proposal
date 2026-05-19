@@ -175,8 +175,11 @@
       .sidebar { display: none; }
       .main { margin-left: 0; padding: 1.5rem 1.25rem; }
       .content-grid { grid-template-columns: 1fr; }
+      .widgets-row { grid-template-columns: 1fr; }
     }
-    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr; } }
+  
+    .widgets-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; }
   </style>
 </head>
 <body>
@@ -420,7 +423,7 @@
     </div>
 
     <!-- New widgets row -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.5rem;margin-top:1.5rem">
+    <div class="widgets-row">
       <!-- Upcoming Collabs widget -->
       <div class="section-card">
         <div class="section-head">

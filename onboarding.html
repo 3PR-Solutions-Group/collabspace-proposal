@@ -190,6 +190,16 @@
       .onboarding-card { padding: 1.75rem 1.25rem; }
       .rate-row { grid-template-columns: 1fr; }
     }
+  
+    .nav-hamburger { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; padding: 0.25rem 0.5rem; line-height: 1; }
+      @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-hamburger { display: block; }
+      .nav-links { display: none !important; }
+    .nav-links a { color: #888; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: #FAFAFA; }
+      .nav-cta { display: none !important; }
+    }
   </style>
 </head>
 <body>

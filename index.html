@@ -297,12 +297,25 @@
     /* RESPONSIVE */
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
       .two-col, .steps, .market-grid, .tiers, .compliance-grid { grid-template-columns: 1fr; }
       .mood-grid { grid-template-columns: repeat(3, 1fr); }
       .names-grid { grid-template-columns: repeat(2, 1fr); }
       .funding-items { grid-template-columns: 1fr; }
       .hero-stats { gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    }
+  
+    .nav-hamburger { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; padding: 0.25rem 0.5rem; line-height: 1; }
+      @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-hamburger { display: block; }
+      .nav-links { display: none !important; }
+      .nav-cta { display: none !important; }
+      .mood-grid { grid-template-columns: 1fr 1fr; }
+      .rev-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .mood-grid { grid-template-columns: 1fr; }
+      .names-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>

@@ -126,11 +126,18 @@
 
     @media (max-width: 1100px) { .creator-grid { grid-template-columns: repeat(3,1fr); } }
     @media (max-width: 768px) {
-      nav { padding: 1rem 1.5rem; }
+      nav { padding: 1rem 1.25rem; }
+      .nav-hamburger { display: block; }
+      .nav-links { display: none !important; }
+    .nav-links a { color: #888; text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: #FAFAFA; }
+      .nav-cta { display: none !important; }
       .explore-wrap { padding: 6rem 1.5rem 3rem; }
       .creator-grid { grid-template-columns: repeat(2,1fr); }
     }
     @media (max-width: 480px) { .creator-grid { grid-template-columns: 1fr; } }
+  
+    .nav-hamburger { display: none; background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; padding: 0.25rem 0.5rem; line-height: 1; }
   </style>
 </head>
 <body>
