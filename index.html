@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CollabSpace — Business Proposal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0A0A0A;
+      --white: #FAFAFA;
+      --accent: #6C63FF;
+      --accent2: #FF6584;
+      --accent3: #43E8AC;
+      --mid: #1A1A2E;
+      --card: #131320;
+      --border: rgba(255,255,255,0.08);
+      --muted: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--accent); color: var(--white); padding: 0.5rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(108,99,255,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 80% 80%, rgba(255,101,132,0.08) 0%, transparent 50%);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(108,99,255,0.15); border: 1px solid rgba(108,99,255,0.3);
+      padding: 0.4rem 1rem; border-radius: 100px;
+      font-size: 0.8rem; font-weight: 600; color: #a09aff;
+      margin-bottom: 2rem; letter-spacing: 0.05em;
+      opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.5rem;
+      opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(135deg, #6C63FF 0%, #FF6584 50%, #43E8AC 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: var(--muted);
+      max-width: 600px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+    }
+    .btn-primary {
+      background: var(--accent); color: var(--white);
+      padding: 0.9rem 2rem; border-radius: 8px;
+      font-size: 1rem; font-weight: 700; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(108,99,255,0.3);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(108,99,255,0.5); }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--muted);
+      padding: 0.9rem 2rem; border-radius: 8px;
+      font-size: 1rem; font-weight: 600; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.25); color: var(--white); }
+
+    .hero-stats {
+      display: flex; gap: 4rem; margin-top: 5rem;
+      opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.04em; }
+    .stat-num.c1 { color: var(--accent); }
+    .stat-num.c2 { color: var(--accent2); }
+    .stat-num.c3 { color: var(--accent3); }
+    .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; margin-top: 0.25rem; }
+
+    /* SECTIONS */
+    section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+    .section-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1.5rem; }
+    .section-sub { font-size: 1.1rem; color: var(--muted); line-height: 1.7; max-width: 600px; margin-bottom: 3rem; }
+
+    /* PROBLEM / SOLUTION */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .problem-card, .solution-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .problem-card:hover { transform: translateY(-4px); border-color: rgba(255,101,132,0.3); }
+    .solution-card:hover { transform: translateY(-4px); border-color: rgba(108,99,255,0.3); }
+    .card-icon { font-size: 2.5rem; margin-bottom: 1.5rem; }
+    .card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+    .card-list { list-style: none; }
+    .card-list li { padding: 0.6rem 0; color: var(--muted); font-size: 0.95rem; border-bottom: 1px solid var(--border); display: flex; gap: 0.75rem; align-items: flex-start; }
+    .card-list li:last-child { border-bottom: none; }
+    .card-list li::before { content: '→'; color: var(--accent2); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .solution-card .card-list li::before { content: '✓'; color: var(--accent3); }
+
+    /* HOW IT WORKS */
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .step-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .step-card:hover { transform: translateY(-4px); border-color: rgba(108,99,255,0.3); }
+    .step-num { font-size: 3rem; font-weight: 900; color: rgba(108,99,255,0.2); font-family: 'DM Mono', monospace; margin-bottom: 1rem; }
+    .step-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .step-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    /* MARKET */
+    .market-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .market-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2.5rem; text-align: center;
+      transition: transform 0.3s;
+    }
+    .market-card:hover { transform: translateY(-4px); }
+    .market-size { font-size: 3rem; font-weight: 900; letter-spacing: -0.04em; }
+    .market-size.tam { color: var(--accent); }
+    .market-size.sam { color: var(--accent2); }
+    .market-size.som { color: var(--accent3); }
+    .market-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.5rem; }
+    .market-desc { font-size: 0.9rem; color: var(--muted); margin-top: 1rem; line-height: 1.6; }
+
+    /* TIERS */
+    .tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .tier-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem;
+      transition: transform 0.3s, border-color 0.3s;
+      position: relative;
+    }
+    .tier-card.featured { border-color: var(--accent); background: rgba(108,99,255,0.08); }
+    .tier-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 100px; white-space: nowrap; letter-spacing: 0.05em; }
+    .tier-name { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.75rem; }
+    .tier-price { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.04em; }
+    .tier-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+    .tier-desc { font-size: 0.85rem; color: var(--muted); margin: 1rem 0; line-height: 1.6; }
+    .tier-features { list-style: none; }
+    .tier-features li { font-size: 0.85rem; color: var(--muted); padding: 0.4rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 0.5rem; }
+    .tier-features li:last-child { border-bottom: none; }
+    .tier-features li::before { content: '✓'; color: var(--accent3); font-weight: 700; flex-shrink: 0; }
+
+    /* REVENUE */
+    .revenue-bars { display: flex; flex-direction: column; gap: 1.5rem; }
+    .rev-row { display: grid; grid-template-columns: 80px 1fr 120px; gap: 1.5rem; align-items: center; }
+    .rev-year { font-size: 0.85rem; font-weight: 700; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .rev-bar-wrap { background: rgba(255,255,255,0.05); border-radius: 4px; height: 12px; overflow: hidden; }
+    .rev-bar { height: 100%; border-radius: 4px; transition: width 1.5s ease; }
+    .rev-bar.y1 { background: linear-gradient(90deg, var(--accent), #9d97ff); }
+    .rev-bar.y2 { background: linear-gradient(90deg, var(--accent2), #ff9ab0); }
+    .rev-bar.y3 { background: linear-gradient(90deg, var(--accent3), #a8f5df); }
+    .rev-amount { font-size: 1.1rem; font-weight: 800; text-align: right; }
+    .rev-amount.y1 { color: var(--accent); }
+    .rev-amount.y2 { color: var(--accent2); }
+    .rev-amount.y3 { color: var(--accent3); }
+
+    /* MOODBOARD */
+    #moodboard { background: var(--mid); border-radius: 24px; padding: 4rem; margin: 0 auto; max-width: 1100px; }
+    .mood-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 3rem; }
+    .mood-swatch {
+      border-radius: 12px; overflow: hidden;
+      aspect-ratio: 3/4;
+      display: flex; flex-direction: column;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .mood-swatch:hover { transform: scale(1.03); }
+    .mood-color { flex: 1; }
+    .mood-name-tag { background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); padding: 0.75rem; }
+    .mood-name-tag strong { font-size: 0.85rem; font-weight: 700; display: block; }
+    .mood-name-tag span { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+
+    /* NAMES */
+    .names-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; }
+    .name-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem;
+      text-align: center; cursor: pointer;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .name-card:hover { transform: translateY(-4px); border-color: rgba(108,99,255,0.4); }
+    .name-card.top-pick { border-color: var(--accent); background: rgba(108,99,255,0.08); }
+    .name-big { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .name-avail { font-size: 0.75rem; font-weight: 700; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+    .name-avail.avail { color: var(--accent3); }
+    .name-avail.taken { color: var(--accent2); }
+    .name-vibe { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* COMPLIANCE */
+    .compliance-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .compliance-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .compliance-card:hover { transform: translateY(-4px); border-color: rgba(67,232,172,0.3); }
+    .comp-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .comp-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .comp-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    /* FUNDING */
+    .funding-items { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .fund-item {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem;
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      transition: transform 0.3s;
+    }
+    .fund-item:hover { transform: translateY(-3px); }
+    .fund-pct { font-size: 2rem; font-weight: 900; color: var(--accent); flex-shrink: 0; font-family: 'DM Mono', monospace; }
+    .fund-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .fund-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(255,101,132,0.05));
+      border-radius: 24px;
+      padding: 5rem 2rem;
+      border: 1px solid var(--border);
+      margin: 4rem auto;
+      max-width: 1100px;
+    }
+    .cta-section h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -0.04em; margin-bottom: 1rem; }
+    .cta-section p { font-size: 1.1rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      color: var(--muted); font-size: 0.85rem;
+    }
+    .footer-logo { font-weight: 800; font-size: 1rem; color: var(--white); }
+    .footer-logo span { color: var(--accent); }
+
+    /* DIVIDER */
+    .full-divider { width: 100%; height: 1px; background: var(--border); margin: 2rem 0; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .two-col, .steps, .market-grid, .tiers, .compliance-grid { grid-template-columns: 1fr; }
+      .mood-grid { grid-template-columns: repeat(3, 1fr); }
+      .names-grid { grid-template-columns: repeat(2, 1fr); }
+      .funding-items { grid-template-columns: 1fr; }
+      .hero-stats { gap: 2rem; flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Collab<span>Space</span></div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#how">How It Works</a>
+    <a href="#market">Market</a>
+    <a href="#tiers">Pricing</a>
+    <a href="#moodboard">Brand</a>
+    <a href="#names">Names</a>
+    <a href="#funding">Funding</a>
+  </div>
+  <a href="#cta" class="nav-cta">Get Involved</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-badge">🚀 Seeking £350,000 Seed Investment</div>
+  <h1>The platform<br/>creators <span class="grad">trust.</span></h1>
+  <p class="hero-sub">CollabSpace connects verified adult content creators, photographers, and brands on a safe, compliant marketplace — built for trust, transparency, and privacy.</p>
+  <div class="hero-actions">
+    <a href="#tiers" class="btn-primary">See the Platform</a>
+    <a href="#funding" class="btn-ghost">Investment Deck ↓</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num c1" data-target="180">0</div>
+      <div class="stat-label">£M UK TAM</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num c2" data-target="350">0</div>
+      <div class="stat-label">£K Seed Ask</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num c3" data-target="3">0</div>
+      <div class="stat-label">Year Runway</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM / SOLUTION -->
+<section id="problem">
+  <div class="section-tag">The Challenge</div>
+  <div class="section-title">The industry is broken.<br/>We're fixing it.</div>
+  <div class="two-col reveal">
+    <div class="problem-card">
+      <div class="card-icon">⚠️</div>
+      <div class="card-title">The Problem</div>
+      <ul class="card-list">
+        <li>No secure vetting — creators risk working with unverified individuals</li>
+        <li>Legal exposure — no compliance framework for adult content industries</li>
+        <li>Exploitation — lack of transparent payment and contract protection</li>
+        <li>Reputation risk — brands can't safely enter creator partnerships</li>
+        <li>No trust layer — industry operates on word-of-mouth and gut feel</li>
+      </ul>
+    </div>
+    <div class="solution-card">
+      <div class="card-icon">✨</div>
+      <div class="card-title">CollabSpace Solves It</div>
+      <ul class="card-list">
+        <li>Social scraping verification on onboarding — identity confirmed instantly</li>
+        <li>BASHH clinic-linked health certificate verification system</li>
+        <li>ID Verified badge — builds trust across the ecosystem</li>
+        <li>Transparent contracts and escrow-style payment protection</li>
+        <li>Full GDPR / ICO framework for Article 9 sensitive data</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-tag">Platform</div>
+  <div class="section-title">How CollabSpace works</div>
+  <div class="steps reveal">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-title">Verified Onboarding</div>
+      <div class="step-desc">Social profile scraping, government ID check, and BASHH health cert verification. Every user earns their badge before they can collaborate.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-title">Discover & Connect</div>
+      <div class="step-desc">Creators, photographers, and brands browse a verified marketplace. Filter by category, location, rate, and availability. Book direct.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-title">Collaborate Safely</div>
+      <div class="step-desc">Built-in contracts, secure messaging, payment protection, and post-shoot review system. Full audit trail for every collaboration.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-title">Management Layer</div>
+      <div class="step-desc">Agencies and managers access dedicated dashboards to scout talent, manage bookings, and track earnings — £75/mo, strict data access controls.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">05</div>
+      <div class="step-title">Trust Score System</div>
+      <div class="step-desc">Reputation built from verified reviews, completed shoots, and compliance record. Higher score = priority placement in search results.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">06</div>
+      <div class="step-title">GDPR by Design</div>
+      <div class="step-desc">Article 9 special category data handled under explicit consent. Right to erasure, DPA agreements, ICO registration, 72h breach notification.</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market">
+  <div class="section-tag">Opportunity</div>
+  <div class="section-title">A massive market with no trusted player</div>
+  <div class="market-grid reveal">
+    <div class="market-card">
+      <div class="market-size tam">£180M</div>
+      <div class="market-label">Total Addressable Market</div>
+      <div class="market-desc">UK adult content creator & photography marketplace economy</div>
+    </div>
+    <div class="market-card">
+      <div class="market-size sam">£42M</div>
+      <div class="market-label">Serviceable Market</div>
+      <div class="market-desc">Active verified professionals seeking compliant collaboration tools</div>
+    </div>
+    <div class="market-card">
+      <div class="market-size som">£4.2M</div>
+      <div class="market-label">Year 3 Target</div>
+      <div class="market-desc">10% SAM capture — 56,000 subscribers at blended £75/mo ARPU</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section id="tiers">
+  <div class="section-tag">Monetisation</div>
+  <div class="section-title">Simple, scalable pricing</div>
+  <div class="tiers reveal">
+    <div class="tier-card">
+      <div class="tier-name">Free</div>
+      <div class="tier-price">£0<span>/mo</span></div>
+      <div class="tier-desc">Verified profile, discovery listing, and connection requests.</div>
+      <ul class="tier-features">
+        <li>ID Verified badge</li>
+        <li>Basic profile listing</li>
+        <li>5 connection requests/month</li>
+        <li>Public portfolio</li>
+      </ul>
+    </div>
+    <div class="tier-card featured">
+      <div class="tier-badge">MOST POPULAR</div>
+      <div class="tier-name">Creator</div>
+      <div class="tier-price">£29<span>/mo</span></div>
+      <div class="tier-desc">Full access for creators and photographers to book and get booked.</div>
+      <ul class="tier-features">
+        <li>Unlimited connections</li>
+        <li>Priority search placement</li>
+        <li>Built-in contracts</li>
+        <li>Payment protection</li>
+        <li>Review system</li>
+        <li>BASHH cert display</li>
+      </ul>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">Brand</div>
+      <div class="tier-price">£49<span>/mo</span></div>
+      <div class="tier-desc">For agencies and brands to run compliant creator campaigns.</div>
+      <ul class="tier-features">
+        <li>Brand profile page</li>
+        <li>Campaign management</li>
+        <li>Verified roster access</li>
+        <li>Brief posting</li>
+        <li>Analytics dashboard</li>
+      </ul>
+    </div>
+    <div class="tier-card">
+      <div class="tier-name">Management</div>
+      <div class="tier-price">£75<span>/mo</span></div>
+      <div class="tier-desc">For agencies scouting and managing multiple creators.</div>
+      <ul class="tier-features">
+        <li>Multi-creator management</li>
+        <li>Scout verified profiles</li>
+        <li>Earnings tracking</li>
+        <li>Strict data access limits</li>
+        <li>No direct booking access</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE -->
+<section id="revenue">
+  <div class="section-tag">Projections</div>
+  <div class="section-title">3-year revenue trajectory</div>
+  <div class="revenue-bars reveal" id="revBars">
+    <div class="rev-row">
+      <div class="rev-year">Year 1</div>
+      <div class="rev-bar-wrap"><div class="rev-bar y1" data-width="12" style="width:0%"></div></div>
+      <div class="rev-amount y1">£312K</div>
+    </div>
+    <div class="rev-row">
+      <div class="rev-year">Year 2</div>
+      <div class="rev-bar-wrap"><div class="rev-bar y2" data-width="42" style="width:0%"></div></div>
+      <div class="rev-amount y2">£1.1M</div>
+    </div>
+    <div class="rev-row">
+      <div class="rev-year">Year 3</div>
+      <div class="rev-bar-wrap"><div class="rev-bar y3" data-width="100" style="width:0%"></div></div>
+      <div class="rev-amount y3">£4.2M</div>
+    </div>
+  </div>
+</section>
+
+<!-- MOODBOARD -->
+<section id="moodboard" style="padding: 4rem 2rem; max-width: 1140px; margin: 0 auto;">
+  <div class="section-tag">Brand Identity</div>
+  <div class="section-title">Visual direction & mood</div>
+  <div class="section-sub">CollabSpace sits at the intersection of professional trust and creative freedom — the brand must feel premium, safe, and distinctly modern.</div>
+
+  <div class="mood-grid reveal">
+    <!-- Direction 1: Dark Premium -->
+    <div class="mood-swatch">
+      <div class="mood-color" style="background: linear-gradient(160deg, #0A0A1A 0%, #1A0A2E 50%, #2E0A4A 100%); display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center; padding:1rem;">
+          <div style="font-size:2.5rem; font-weight:900; letter-spacing:-0.05em; color:#C4B5FD;">CS</div>
+          <div style="font-size:0.7rem; color:rgba(196,181,253,0.6); margin-top:0.5rem; letter-spacing:0.2em;">COLLABSPACE</div>
+        </div>
+      </div>
+      <div class="mood-name-tag">
+        <strong>Dark Premium</strong>
+        <span>Deep violet · Trust · Exclusivity</span>
+      </div>
+    </div>
+
+    <!-- Direction 2: Electric -->
+    <div class="mood-swatch">
+      <div class="mood-color" style="background: linear-gradient(160deg, #050510 0%, #0D0D2B 40%, #0A0A0A 100%); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+        <div style="position:absolute; width:120px; height:120px; background: radial-gradient(circle, rgba(108,99,255,0.4) 0%, transparent 70%); border-radius:50%;"></div>
+        <div style="text-align:center; padding:1rem; position:relative;">
+          <div style="font-size:2rem; font-weight:900; color:#6C63FF; letter-spacing:-0.05em;">collab<span style="color:#FF6584;">space</span></div>
+        </div>
+      </div>
+      <div class="mood-name-tag">
+        <strong>Electric Neon</strong>
+        <span>Purple/pink · Bold · Gen-Z</span>
+      </div>
+    </div>
+
+    <!-- Direction 3: Clean Minimal -->
+    <div class="mood-swatch">
+      <div class="mood-color" style="background: linear-gradient(160deg, #F8F7FF 0%, #EEF2FF 100%); display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center; padding:1rem;">
+          <div style="font-size:2rem; font-weight:900; color:#1E1B4B; letter-spacing:-0.05em;">The Roster</div>
+          <div style="width:40px; height:3px; background:#6C63FF; margin:0.75rem auto;"></div>
+          <div style="font-size:0.7rem; color:#6B7280; letter-spacing:0.15em;">VERIFIED PROFESSIONALS</div>
+        </div>
+      </div>
+      <div class="mood-name-tag">
+        <strong>Clean Minimal</strong>
+        <span>White · Indigo · Professional</span>
+      </div>
+    </div>
+
+    <!-- Direction 4: Photography-led -->
+    <div class="mood-swatch">
+      <div class="mood-color" style="background: linear-gradient(160deg, #0D0D0D 0%, #1A1A1A 100%); display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center; padding:1rem;">
+          <div style="width:48px; height:48px; border-radius:50%; border:3px solid #43E8AC; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-size:1.5rem;">📷</div>
+          <div style="font-size:1.5rem; font-weight:900; color:#FAFAFA; letter-spacing:-0.05em;">RAW</div>
+          <div style="font-size:0.65rem; color:#43E8AC; margin-top:0.5rem; letter-spacing:0.2em; font-weight:700;">VERIFIED CREATORS</div>
+        </div>
+      </div>
+      <div class="mood-name-tag">
+        <strong>Studio Dark</strong>
+        <span>Black · Teal · Photography</span>
+      </div>
+    </div>
+
+    <!-- Direction 5: Industry Pro -->
+    <div class="mood-swatch">
+      <div class="mood-color" style="background: linear-gradient(160deg, #18181B 0%, #27272A 100%); display:flex; align-items:center; justify-content:center;">
+        <div style="text-align:center; padding:1rem;">
+          <div style="font-family:'DM Mono',monospace; font-size:0.65rem; color:#71717A; letter-spacing:0.2em; margin-bottom:0.75rem;">PRODUCTION · TRUST · COMPLIANCE</div>
+          <div style="font-size:2rem; font-weight:900; color:#F4F4F5; letter-spacing:-0.05em;">CALLSHEET</div>
+          <div style="width:100%; height:1px; background:rgba(255,255,255,0.1); margin:0.75rem 0;"></div>
+          <div style="font-size:0.65rem; color:#52525B; letter-spacing:0.1em;">THE INDUSTRY STANDARD</div>
+        </div>
+      </div>
+      <div class="mood-name-tag">
+        <strong>Industry Grade</strong>
+        <span>Zinc · White · Mono type</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NAMES -->
+<section id="names">
+  <div class="section-tag">Brand Names</div>
+  <div class="section-title">Name shortlist + domain check</div>
+  <div class="section-sub">Checked live against RDAP. ✅ Available · ❌ Taken</div>
+  <div class="names-grid reveal">
+    <div class="name-card top-pick">
+      <div class="name-big">The Roster</div>
+      <div class="name-avail avail">✅ .co.uk · .com AVAILABLE</div>
+      <div class="name-vibe">Insider, exclusive, industry-coded. Feels like you're on the list — because you are.</div>
+    </div>
+    <div class="name-card top-pick">
+      <div class="name-big">Collabd</div>
+      <div class="name-avail avail">✅ .com · .co.uk AVAILABLE</div>
+      <div class="name-vibe">Short, modern, global. The d suffix is a move — like a past tense meaning "it got done."</div>
+    </div>
+    <div class="name-card">
+      <div class="name-big">Callsheet</div>
+      <div class="name-avail avail">✅ .io · .co.uk AVAILABLE</div>
+      <div class="name-vibe">Niche but perfect. Every professional in this industry knows what a call sheet is.</div>
+    </div>
+    <div class="name-card">
+      <div class="name-big">RAW</div>
+      <div class="name-avail avail">✅ rawtalent.co.uk AVAILABLE</div>
+      <div class="name-vibe">Bold, unfiltered, photography double meaning. Short is memorable.</div>
+    </div>
+    <div class="name-card">
+      <div class="name-big">Join Roster</div>
+      <div class="name-avail avail">✅ joinroster.com · .co.uk AVAILABLE</div>
+      <div class="name-vibe">Action-first. The "join" framing positions the platform as something worth getting onto.</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE -->
+<section id="compliance">
+  <div class="section-tag">Trust & Safety</div>
+  <div class="section-title">Compliance built in from day one</div>
+  <div class="compliance-grid reveal">
+    <div class="compliance-card">
+      <div class="comp-icon">🔐</div>
+      <div class="comp-title">GDPR / Article 9</div>
+      <div class="comp-desc">Special category data (health certs, ID) handled under explicit consent with DPA agreements. Right to erasure, breach notification within 72h.</div>
+    </div>
+    <div class="compliance-card">
+      <div class="comp-icon">🏥</div>
+      <div class="comp-title">BASHH Integration</div>
+      <div class="comp-desc">Health certificate verification via BASHH clinic network. Verified certs displayed on profile with expiry — no cert, no booking.</div>
+    </div>
+    <div class="compliance-card">
+      <div class="comp-icon">✅</div>
+      <div class="comp-title">ID Verified Badge</div>
+      <div class="comp-desc">Government ID + social profile cross-check on every account. Verified badge visible across all discovery surfaces.</div>
+    </div>
+    <div class="compliance-card">
+      <div class="comp-icon">📋</div>
+      <div class="comp-title">ICO Registration</div>
+      <div class="comp-desc">CollabSpace registered with the Information Commissioner's Office as a data controller processing special category data.</div>
+    </div>
+    <div class="compliance-card">
+      <div class="comp-icon">⚖️</div>
+      <div class="comp-title">Contract Protection</div>
+      <div class="comp-desc">Every shoot covered by a platform-generated contract. Built-in IP assignment, model release, payment terms, and cancellation clauses.</div>
+    </div>
+    <div class="compliance-card">
+      <div class="comp-icon">🛡️</div>
+      <div class="comp-title">Data Retention</div>
+      <div class="comp-desc">Health data retained for 90 days max. ID data encrypted at rest, hashed post-verification. Full audit trail per regulatory requirement.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDING -->
+<section id="funding">
+  <div class="section-tag">Investment</div>
+  <div class="section-title">£350,000 Seed Round</div>
+  <div class="section-sub">Pre-revenue, building the trust layer for a £180M market. Here's how the capital deploys:</div>
+  <div class="funding-items reveal">
+    <div class="fund-item">
+      <div class="fund-pct">40%</div>
+      <div>
+        <div class="fund-title">Product & Engineering — £140K</div>
+        <div class="fund-desc">Platform build, verification API integrations (BASHH, ID), payment infrastructure, and mobile apps for iOS and Android.</div>
+      </div>
+    </div>
+    <div class="fund-item">
+      <div class="fund-pct">25%</div>
+      <div>
+        <div class="fund-title">Growth & GTM — £87.5K</div>
+        <div class="fund-desc">Creator community seeding, industry partnerships, PR, and performance marketing to hit 2,000 verified users by month 6.</div>
+      </div>
+    </div>
+    <div class="fund-item">
+      <div class="fund-pct">20%</div>
+      <div>
+        <div class="fund-title">Compliance & Legal — £70K</div>
+        <div class="fund-desc">ICO registration, DPA framework, legal counsel, BASHH partnership agreement, and ongoing regulatory oversight.</div>
+      </div>
+    </div>
+    <div class="fund-item">
+      <div class="fund-pct">15%</div>
+      <div>
+        <div class="fund-title">Operations & Reserve — £52.5K</div>
+        <div class="fund-desc">Team salaries (founder + 2 hires), infrastructure, tooling, and a 3-month operating reserve buffer.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="cta">
+  <div class="section-tag" style="justify-content:center; display:flex;">Ready to Back Us</div>
+  <h2>Let's build the trust<br/>layer together.</h2>
+  <p>Seed round open. Looking for the right investors who understand this market.</p>
+  <div class="hero-actions" style="justify-content:center;">
+    <a href="mailto:os@3pr.uk" class="btn-primary">Get the Full Deck</a>
+    <a href="mailto:os@3pr.uk" class="btn-ghost">Book a Call</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Collab<span>Space</span></div>
+  <div>Built by <strong>3PR</strong> · Confidential Business Proposal · 2026</div>
+  <div>os@3pr.uk</div>
+</footer>
+
+<script>
+  // Intersection Observer for reveal animations
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Animate revenue bars
+        if (e.target.id === 'revBars' || e.target.closest('#revBars')) {
+          animateBars();
+        }
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Stat counter
+  const stats = document.querySelectorAll('[data-target]');
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = parseInt(e.target.dataset.target);
+        const suffix = e.target.parentElement.querySelector('.stat-label').textContent.includes('K') ? 'K' : (e.target.parentElement.querySelector('.stat-label').textContent.includes('£M') ? 'M' : '');
+        let current = 0;
+        const step = target / 50;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          e.target.textContent = Math.floor(current);
+        }, 30);
+        statsObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  stats.forEach(s => statsObserver.observe(s));
+
+  // Revenue bar animation
+  function animateBars() {
+    document.querySelectorAll('.rev-bar').forEach(bar => {
+      const targetWidth = bar.dataset.width + '%';
+      setTimeout(() => { bar.style.width = targetWidth; }, 200);
+    });
+  }
+  const revSection = document.querySelector('#revBars');
+  if (revSection) observer.observe(revSection);
+</script>
+</body>
+</html>
