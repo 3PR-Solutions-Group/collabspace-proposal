@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Collabd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0A0A0A; --white: #FAFAFA; --accent: #6C63FF;
+      --accent2: #FF6584; --accent3: #43E8AC; --card: #131320;
+      --border: rgba(255,255,255,0.08); --muted: #888;
+      --sidebar-w: 240px;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); min-height: 100dvh; display: flex; }
+
+    /* Sidebar */
+    .sidebar {
+      width: var(--sidebar-w); min-height: 100dvh; background: #0e0e1a;
+      border-right: 1px solid var(--border); display: flex; flex-direction: column;
+      padding: 1.5rem 1.25rem; position: fixed; top: 0; left: 0; z-index: 50;
+    }
+    .sidebar-logo { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 2.5rem; padding: 0 0.25rem; }
+    .sidebar-logo span { color: var(--accent); }
+    .nav-section { font-size: 0.68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; padding: 0 0.5rem; margin-bottom: 0.5rem; margin-top: 1.5rem; }
+    .nav-section:first-of-type { margin-top: 0; }
+    .nav-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.7rem 0.75rem; border-radius: 8px; cursor: pointer;
+      font-size: 0.875rem; font-weight: 500; color: var(--muted);
+      transition: all 0.15s; text-decoration: none; margin-bottom: 0.2rem;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+    .nav-item.active { background: rgba(108,99,255,0.15); color: var(--white); font-weight: 600; }
+    .nav-item .icon { font-size: 1rem; width: 20px; text-align: center; }
+    .nav-badge {
+      margin-left: auto; background: var(--accent2); color: #fff;
+      font-size: 0.68rem; font-weight: 700; padding: 0.15rem 0.45rem;
+      border-radius: 100px;
+    }
+    .sidebar-profile {
+      margin-top: auto; display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem; background: rgba(255,255,255,0.04); border-radius: 10px;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .sidebar-profile:hover { background: rgba(255,255,255,0.08); }
+    .profile-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .profile-info .name { font-size: 0.82rem; font-weight: 600; }
+    .profile-info .plan { font-size: 0.72rem; color: var(--accent3); }
+    .verified-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent3); margin-left: auto; flex-shrink: 0;
+    }
+
+    /* Main */
+    .main {
+      margin-left: var(--sidebar-w); flex: 1; padding: 2.5rem 2.5rem 3rem;
+      min-height: 100dvh;
+    }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .page-title { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.03em; }
+    .page-sub { font-size: 0.875rem; color: var(--muted); margin-top: 0.2rem; }
+    .btn-sm {
+      padding: 0.55rem 1.2rem; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-sm:hover { opacity: 0.85; }
+
+    /* Stats grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .stat-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .stat-label { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.75rem; }
+    .stat-value { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.04em; font-family: 'DM Mono', monospace; }
+    .stat-value.accent { color: var(--accent); }
+    .stat-value.teal { color: var(--accent3); }
+    .stat-value.pink { color: var(--accent2); }
+    .stat-change { font-size: 0.75rem; color: var(--accent3); margin-top: 0.4rem; }
+    .stat-change.down { color: var(--accent2); }
+
+    /* Trust score ring */
+    .trust-card { position: relative; }
+    .trust-ring-wrap { display: flex; align-items: center; gap: 1rem; }
+    .ring-svg { width: 60px; height: 60px; }
+    .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 4; }
+    .ring-fill { fill: none; stroke: var(--accent3); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 163; stroke-dashoffset: 24; transition: stroke-dashoffset 1s ease; transform: rotate(-90deg); transform-origin: 30px 30px; }
+
+    /* Content grid */
+    .content-grid { display: grid; grid-template-columns: 1fr 380px; gap: 1.5rem; }
+
+    /* Bookings */
+    .section-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 1.5rem; overflow: hidden;
+    }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .section-title { font-size: 0.95rem; font-weight: 700; }
+    .section-link { font-size: 0.8rem; color: var(--accent); text-decoration: none; }
+    .section-link:hover { opacity: 0.8; }
+
+    .booking-item {
+      display: flex; align-items: center; gap: 1rem; padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .booking-item:last-child { border-bottom: none; }
+    .booking-avatar {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 700; color: #fff;
+    }
+    .booking-info .booking-name { font-size: 0.875rem; font-weight: 600; }
+    .booking-info .booking-detail { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+    .booking-right { margin-left: auto; text-align: right; }
+    .booking-right .amount { font-size: 0.9rem; font-weight: 700; font-family: 'DM Mono', monospace; }
+    .booking-status {
+      font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 100px;
+      margin-top: 0.3rem; display: inline-block;
+    }
+    .status-confirmed { background: rgba(67,232,172,0.12); color: var(--accent3); }
+    .status-pending { background: rgba(255,101,132,0.12); color: var(--accent2); }
+    .status-complete { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+    /* Messages */
+    .message-item {
+      display: flex; align-items: flex-start; gap: 0.85rem; padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border); cursor: pointer;
+      transition: background 0.15s; border-radius: 8px; padding: 0.75rem;
+      margin: 0 -0.75rem;
+    }
+    .message-item:hover { background: rgba(255,255,255,0.03); }
+    .message-item:last-child { border-bottom: none; }
+    .msg-avatar {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 700; color: #fff;
+    }
+    .msg-name { font-size: 0.82rem; font-weight: 600; }
+    .msg-preview { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 240px; }
+    .msg-time { font-size: 0.72rem; color: var(--muted); margin-left: auto; flex-shrink: 0; }
+    .unread-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-top: 5px; }
+
+    /* Earnings chart placeholder */
+    .chart-area {
+      height: 120px; background: linear-gradient(180deg, rgba(108,99,255,0.15) 0%, transparent 100%);
+      border-radius: 8px; position: relative; overflow: hidden; margin-top: 1rem;
+    }
+    .chart-line {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent3));
+    }
+    .chart-bars { display: flex; align-items: flex-end; gap: 4px; height: 100%; padding: 0.75rem 0.75rem 24px; }
+    .chart-bar {
+      flex: 1; border-radius: 3px 3px 0 0;
+      background: linear-gradient(180deg, rgba(108,99,255,0.6), rgba(108,99,255,0.2));
+      transition: opacity 0.2s;
+    }
+    .chart-bar:hover { opacity: 0.8; }
+    .chart-labels { display: flex; justify-content: space-between; padding: 0.3rem 0.75rem 0; }
+    .chart-label { font-size: 0.65rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+    @media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 1.5rem 1.25rem; }
+      .content-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">collab<span>d</span></div>
+
+    <div class="nav-section">Main</div>
+    <a class="nav-item active" href="dashboard.html">
+      <span class="icon">◉</span> Dashboard
+    </a>
+    <a class="nav-item" href="explore.html">
+      <span class="icon">🔭</span> Discover
+    </a>
+    <a class="nav-item" href="#">
+      <span class="icon">📅</span> Bookings
+      <span class="nav-badge">3</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="icon">💬</span> Messages
+      <span class="nav-badge">5</span>
+    </a>
+
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="#">
+      <span class="icon">💰</span> Earnings
+    </a>
+    <a class="nav-item" href="profile.html">
+      <span class="icon">👤</span> My Profile
+    </a>
+    <a class="nav-item" href="#">
+      <span class="icon">⚙️</span> Settings
+    </a>
+
+    <div class="sidebar-profile">
+      <div class="profile-avatar">MR</div>
+      <div class="profile-info">
+        <div class="name">Maya Reeves</div>
+        <div class="plan">Creator Plan</div>
+      </div>
+      <div class="verified-dot"></div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Good morning, Maya 👋</div>
+        <div class="page-sub">Here's what's happening on your account</div>
+      </div>
+      <a href="profile.html" class="btn-sm">View public profile →</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Shoots this month</div>
+        <div class="stat-value accent">8</div>
+        <div class="stat-change">↑ +3 vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Earnings (MTD)</div>
+        <div class="stat-value teal">£2,840</div>
+        <div class="stat-change">↑ +£620 vs last month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Profile views</div>
+        <div class="stat-value" style="color:var(--accent2)">347</div>
+        <div class="stat-change">↑ +82 this week</div>
+      </div>
+      <div class="stat-card trust-card">
+        <div class="stat-label">Trust score</div>
+        <div class="trust-ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 60 60">
+            <circle class="ring-bg" cx="30" cy="30" r="26"/>
+            <circle class="ring-fill" id="ring-fill" cx="30" cy="30" r="26"/>
+          </svg>
+          <div>
+            <div class="stat-value teal" style="font-size:1.6rem">94</div>
+            <div class="stat-change">Excellent</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content grid -->
+    <div class="content-grid">
+      <!-- Left: bookings + chart -->
+      <div>
+        <div class="section-card" style="margin-bottom:1.5rem;">
+          <div class="section-head">
+            <div class="section-title">Recent Bookings</div>
+            <a href="#" class="section-link">View all →</a>
+          </div>
+          <div class="booking-item">
+            <div class="booking-avatar" style="background:linear-gradient(135deg,#6C63FF,#FF6584)">JH</div>
+            <div class="booking-info">
+              <div class="booking-name">James Harper Photography</div>
+              <div class="booking-detail">Boudoir editorial · 14 Jun 2025</div>
+            </div>
+            <div class="booking-right">
+              <div class="amount">£450</div>
+              <div class="booking-status status-confirmed">Confirmed</div>
+            </div>
+          </div>
+          <div class="booking-item">
+            <div class="booking-avatar" style="background:linear-gradient(135deg,#43E8AC,#6C63FF)">SL</div>
+            <div class="booking-info">
+              <div class="booking-name">Studio London Ltd</div>
+              <div class="booking-detail">Commercial fashion · 19 Jun 2025</div>
+            </div>
+            <div class="booking-right">
+              <div class="amount">£680</div>
+              <div class="booking-status status-pending">Pending</div>
+            </div>
+          </div>
+          <div class="booking-item">
+            <div class="booking-avatar" style="background:linear-gradient(135deg,#FF6584,#43E8AC)">KM</div>
+            <div class="booking-info">
+              <div class="booking-name">Kai Morin Creative</div>
+              <div class="booking-detail">Fine art nude · 8 Jun 2025</div>
+            </div>
+            <div class="booking-right">
+              <div class="amount">£350</div>
+              <div class="booking-status status-complete">Complete</div>
+            </div>
+          </div>
+          <div class="booking-item">
+            <div class="booking-avatar" style="background:linear-gradient(135deg,#6C63FF,#43E8AC)">RP</div>
+            <div class="booking-info">
+              <div class="booking-name">Rosa Price — Independent</div>
+              <div class="booking-detail">Lingerie editorial · 5 Jun 2025</div>
+            </div>
+            <div class="booking-right">
+              <div class="amount">£280</div>
+              <div class="booking-status status-complete">Complete</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-head">
+            <div class="section-title">Earnings — last 8 weeks</div>
+            <div style="font-size:0.8rem;color:var(--accent3);font-family:'DM Mono',monospace;">£8,420 total</div>
+          </div>
+          <div class="chart-area">
+            <div class="chart-bars">
+              <div class="chart-bar" style="height:45%"></div>
+              <div class="chart-bar" style="height:60%"></div>
+              <div class="chart-bar" style="height:35%"></div>
+              <div class="chart-bar" style="height:75%"></div>
+              <div class="chart-bar" style="height:55%"></div>
+              <div class="chart-bar" style="height:80%"></div>
+              <div class="chart-bar" style="height:65%"></div>
+              <div class="chart-bar" style="height:90%"></div>
+            </div>
+          </div>
+          <div class="chart-labels">
+            <span class="chart-label">Apr 1</span>
+            <span class="chart-label">Apr 8</span>
+            <span class="chart-label">Apr 15</span>
+            <span class="chart-label">Apr 22</span>
+            <span class="chart-label">May 1</span>
+            <span class="chart-label">May 8</span>
+            <span class="chart-label">May 15</span>
+            <span class="chart-label">Today</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: messages -->
+      <div class="section-card" style="height:fit-content;">
+        <div class="section-head">
+          <div class="section-title">Messages</div>
+          <a href="#" class="section-link">Open inbox →</a>
+        </div>
+        <div class="message-item">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#6C63FF,#FF6584)">JH</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="msg-name">James Harper</div>
+              <div class="msg-time">2m</div>
+            </div>
+            <div class="msg-preview">Looks great — shall we confirm 9am on the 14th?</div>
+          </div>
+          <div class="unread-dot" style="margin-left:0.5rem"></div>
+        </div>
+        <div class="message-item">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#43E8AC,#6C63FF)">SL</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="msg-name">Studio London</div>
+              <div class="msg-time">1h</div>
+            </div>
+            <div class="msg-preview">Contract sent — please sign by Friday</div>
+          </div>
+          <div class="unread-dot" style="margin-left:0.5rem"></div>
+        </div>
+        <div class="message-item">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#FF6584,#43E8AC)">KM</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="msg-name">Kai Morin</div>
+              <div class="msg-time">3h</div>
+            </div>
+            <div class="msg-preview">Amazing work on Saturday, thank you so much!</div>
+          </div>
+        </div>
+        <div class="message-item">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#6C63FF,#43E8AC)">TA</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="msg-name">Taylor Andrews</div>
+              <div class="msg-time">1d</div>
+            </div>
+            <div class="msg-preview">Are you available for a shoot in Manchester next...</div>
+          </div>
+          <div class="unread-dot" style="margin-left:0.5rem"></div>
+        </div>
+        <div class="message-item">
+          <div class="msg-avatar" style="background:linear-gradient(135deg,#FF6584,#6C63FF)">NW</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div class="msg-name">Nova Wilde</div>
+              <div class="msg-time">2d</div>
+            </div>
+            <div class="msg-preview">Would love to collab for my editorial series</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Animate trust ring on load
+    window.addEventListener('load', () => {
+      const ring = document.getElementById('ring-fill');
+      if (ring) {
+        ring.style.strokeDashoffset = '163';
+        setTimeout(() => { ring.style.strokeDashoffset = '10'; }, 200);
+      }
+      // Animate chart bars
+      document.querySelectorAll('.chart-bar').forEach((bar, i) => {
+        const h = bar.style.height;
+        bar.style.height = '0';
+        setTimeout(() => { bar.style.height = h; bar.style.transition = 'height 0.6s ease'; }, 100 + i * 80);
+      });
+    });
+  </script>
+</body>
+</html>

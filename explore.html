@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Creators — Collabd</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0A0A0A; --white: #FAFAFA; --accent: #6C63FF;
+      --accent2: #FF6584; --accent3: #43E8AC; --card: #131320;
+      --border: rgba(255,255,255,0.08); --muted: #888;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--black); color: var(--white); }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.9); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.03em; }
+    .nav-logo span { color: var(--accent); }
+    .nav-actions { display: flex; gap: 1rem; align-items: center; }
+    .nav-link { color: var(--muted); text-decoration: none; font-size: 0.85rem; }
+    .nav-link:hover { color: var(--white); }
+    .btn-nav {
+      padding: 0.5rem 1.2rem; background: var(--accent); color: #fff;
+      border-radius: 6px; text-decoration: none; font-size: 0.82rem; font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn-nav:hover { opacity: 0.85; }
+
+    /* Page */
+    .explore-wrap { padding: 7rem 3rem 4rem; max-width: 1200px; margin: 0 auto; }
+    .explore-header { margin-bottom: 2rem; }
+    .explore-title { font-size: 2rem; font-weight: 900; letter-spacing: -0.04em; margin-bottom: 0.4rem; }
+    .explore-sub { font-size: 0.9rem; color: var(--muted); }
+
+    /* Search */
+    .search-bar-wrap {
+      position: relative; margin-bottom: 1.25rem;
+    }
+    .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 1rem; pointer-events: none; }
+    .search-input {
+      width: 100%; padding: 0.9rem 1rem 0.9rem 2.75rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--white); font-family: 'Inter', sans-serif;
+      font-size: 0.9rem; outline: none; transition: border-color 0.2s;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-color: var(--accent); }
+
+    /* Filters */
+    .filter-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; align-items: center; }
+    .filter-chip {
+      padding: 0.45rem 1rem; border-radius: 100px; font-size: 0.82rem; font-weight: 600;
+      border: 1.5px solid var(--border); background: transparent; color: var(--muted);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .filter-chip.active { background: rgba(108,99,255,0.15); border-color: var(--accent); color: var(--white); }
+    .filter-chip:hover:not(.active) { border-color: rgba(255,255,255,0.2); color: var(--white); }
+    .filter-divider { width: 1px; height: 24px; background: var(--border); margin: 0 0.25rem; }
+    .results-count { margin-left: auto; font-size: 0.8rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+    /* Grid */
+    .creator-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+
+    .creator-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+      cursor: pointer; position: relative;
+    }
+    .creator-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,0.4); border-color: rgba(108,99,255,0.4); }
+    .creator-card:hover .card-overlay { opacity: 1; }
+    .creator-card:hover .card-body { padding-bottom: 60px; }
+
+    .card-avatar {
+      width: 100%; aspect-ratio: 1; display: flex; align-items: center;
+      justify-content: center; font-size: 2.5rem; font-weight: 900; color: #fff;
+      font-family: 'Inter', sans-serif; position: relative; overflow: hidden;
+    }
+    .card-avatar-inner { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+    .trust-ring-mini {
+      position: absolute; bottom: 0.5rem; right: 0.5rem;
+      background: rgba(10,10,10,0.8); border: 1.5px solid var(--accent3);
+      border-radius: 100px; padding: 0.15rem 0.4rem;
+      font-size: 0.68rem; font-weight: 700; color: var(--accent3);
+      font-family: 'DM Mono', monospace; z-index: 2;
+    }
+
+    .card-body { padding: 1.1rem; transition: padding 0.25s; }
+    .card-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .card-handle { font-size: 0.75rem; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 0.6rem; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.75rem; }
+    .card-tag { font-size: 0.7rem; padding: 0.2rem 0.55rem; border-radius: 100px; background: rgba(255,255,255,0.05); color: var(--muted); border: 1px solid var(--border); }
+    .card-rate { font-size: 0.82rem; font-family: 'DM Mono', monospace; color: var(--accent3); }
+    .card-location { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+    .card-verified { display: flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; color: var(--accent3); font-weight: 700; }
+
+    .card-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(10,10,10,0.95));
+      opacity: 0; transition: opacity 0.25s;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 1.25rem;
+    }
+    .view-profile-btn {
+      display: block; width: 100%; text-align: center;
+      padding: 0.65rem; background: var(--accent); color: #fff;
+      border-radius: 8px; text-decoration: none; font-size: 0.82rem; font-weight: 700;
+      transition: opacity 0.2s;
+    }
+    .view-profile-btn:hover { opacity: 0.88; }
+
+    /* Pagination stub */
+    .load-more { text-align: center; margin-top: 3rem; }
+    .btn-load {
+      padding: 0.85rem 2.5rem; background: transparent; color: var(--white);
+      border: 1px solid var(--border); border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;
+    }
+    .btn-load:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); }
+
+    @media (max-width: 1100px) { .creator-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .explore-wrap { padding: 6rem 1.5rem 3rem; }
+      .creator-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 480px) { .creator-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-logo">collab<span>d</span></div>
+    <div class="nav-actions">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="onboarding.html" class="btn-nav">Join free</a>
+    </div>
+  </nav>
+
+  <div class="explore-wrap">
+    <div class="explore-header">
+      <div class="explore-title">Discover creators</div>
+      <div class="explore-sub">Every profile is ID-verified and BASHH-certified. Safe collaborations by design.</div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="Search by name, location, category..." oninput="filterCards(this.value)" />
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row">
+      <button class="filter-chip active" onclick="setFilter(this,'all')">All</button>
+      <button class="filter-chip" onclick="setFilter(this,'creator')">Creator</button>
+      <button class="filter-chip" onclick="setFilter(this,'photographer')">Photographer</button>
+      <button class="filter-chip" onclick="setFilter(this,'brand')">Brand</button>
+      <div class="filter-divider"></div>
+      <button class="filter-chip" onclick="setFilter(this,'london')">London</button>
+      <button class="filter-chip" onclick="setFilter(this,'manchester')">Manchester</button>
+      <button class="filter-chip" onclick="setFilter(this,'under300')">Under £300/day</button>
+      <span class="results-count" id="results-count">8 results</span>
+    </div>
+
+    <!-- Creator grid -->
+    <div class="creator-grid" id="creator-grid">
+
+      <!-- Card 1 -->
+      <div class="creator-card" data-type="creator" data-location="london" data-rate="250">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#6C63FF,#FF6584)">
+          <div class="card-avatar-inner">MR</div>
+          <div class="trust-ring-mini">94</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Maya Reeves</div>
+          <div class="card-handle">@maya.reeves</div>
+          <div class="card-tags">
+            <span class="card-tag">Boudoir</span>
+            <span class="card-tag">Fine Art</span>
+            <span class="card-tag">Editorial</span>
+          </div>
+          <div class="card-rate">from £250/day</div>
+          <div class="card-location">📍 London, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="creator-card" data-type="photographer" data-location="london" data-rate="400">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#43E8AC,#6C63FF)">
+          <div class="card-avatar-inner">JH</div>
+          <div class="trust-ring-mini">91</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">James Harper</div>
+          <div class="card-handle">@jharper.photo</div>
+          <div class="card-tags">
+            <span class="card-tag">Boudoir</span>
+            <span class="card-tag">Commercial</span>
+          </div>
+          <div class="card-rate">from £400/day</div>
+          <div class="card-location">📍 London, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="creator-card" data-type="creator" data-location="manchester" data-rate="200">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#FF6584,#43E8AC)">
+          <div class="card-avatar-inner">SV</div>
+          <div class="trust-ring-mini">88</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Sofia Vasquez</div>
+          <div class="card-handle">@sofia.v</div>
+          <div class="card-tags">
+            <span class="card-tag">Lingerie</span>
+            <span class="card-tag">Fashion</span>
+          </div>
+          <div class="card-rate">from £200/day</div>
+          <div class="card-location">📍 Manchester, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="creator-card" data-type="photographer" data-location="london" data-rate="550">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#6C63FF,#43E8AC)">
+          <div class="card-avatar-inner">KM</div>
+          <div class="trust-ring-mini">96</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Kai Morin</div>
+          <div class="card-handle">@kai.morin</div>
+          <div class="card-tags">
+            <span class="card-tag">Fine Art</span>
+            <span class="card-tag">Editorial</span>
+          </div>
+          <div class="card-rate">from £550/day</div>
+          <div class="card-location">📍 London, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="creator-card" data-type="creator" data-location="london" data-rate="280">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#FF6584,#6C63FF)">
+          <div class="card-avatar-inner">NW</div>
+          <div class="trust-ring-mini">87</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Nova Wilde</div>
+          <div class="card-handle">@nova.wilde</div>
+          <div class="card-tags">
+            <span class="card-tag">Adult</span>
+            <span class="card-tag">Boudoir</span>
+          </div>
+          <div class="card-rate">from £280/day</div>
+          <div class="card-location">📍 London, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="creator-card" data-type="brand" data-location="manchester" data-rate="0">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#43E8AC,#FF6584)">
+          <div class="card-avatar-inner" style="font-size:1.2rem;letter-spacing:-0.02em;">SL</div>
+          <div class="trust-ring-mini">93</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Studio London Ltd</div>
+          <div class="card-handle">@studiolondon</div>
+          <div class="card-tags">
+            <span class="card-tag">Commercial</span>
+            <span class="card-tag">Fashion</span>
+          </div>
+          <div class="card-rate">Brand account</div>
+          <div class="card-location">📍 Manchester, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="creator-card" data-type="creator" data-location="london" data-rate="220">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#6C63FF,#FF6584,#43E8AC)">
+          <div class="card-avatar-inner">RP</div>
+          <div class="trust-ring-mini">85</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Rosa Price</div>
+          <div class="card-handle">@rosa.price</div>
+          <div class="card-tags">
+            <span class="card-tag">Lingerie</span>
+            <span class="card-tag">Fitness</span>
+          </div>
+          <div class="card-rate">from £220/day</div>
+          <div class="card-location">📍 London, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="creator-card" data-type="photographer" data-location="manchester" data-rate="350">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#43E8AC,#6C63FF,#FF6584)">
+          <div class="card-avatar-inner">TA</div>
+          <div class="trust-ring-mini">90</div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Taylor Andrews</div>
+          <div class="card-handle">@tandrews</div>
+          <div class="card-tags">
+            <span class="card-tag">Editorial</span>
+            <span class="card-tag">Commercial</span>
+          </div>
+          <div class="card-rate">from £350/day</div>
+          <div class="card-location">📍 Manchester, UK</div>
+          <div class="card-verified" style="margin-top:0.5rem;">✓ Verified</div>
+        </div>
+        <div class="card-overlay">
+          <a href="profile.html" class="view-profile-btn">View Profile →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="load-more">
+      <button class="btn-load" onclick="showMore()">Load more creators</button>
+    </div>
+  </div>
+
+  <script>
+    let activeFilter = 'all';
+
+    function setFilter(el, type) {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      activeFilter = type;
+      applyFilters();
+    }
+
+    function filterCards(query) {
+      applyFilters(query);
+    }
+
+    function applyFilters(query = '') {
+      const cards = document.querySelectorAll('.creator-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const type = card.dataset.type;
+        const loc = card.dataset.location;
+        const rate = parseInt(card.dataset.rate);
+        const name = card.querySelector('.card-name').textContent.toLowerCase();
+        const handle = card.querySelector('.card-handle').textContent.toLowerCase();
+        const tags = Array.from(card.querySelectorAll('.card-tag')).map(t => t.textContent.toLowerCase()).join(' ');
+
+        let show = true;
+
+        // Filter by type
+        if (activeFilter === 'creator' && type !== 'creator') show = false;
+        if (activeFilter === 'photographer' && type !== 'photographer') show = false;
+        if (activeFilter === 'brand' && type !== 'brand') show = false;
+        if (activeFilter === 'london' && loc !== 'london') show = false;
+        if (activeFilter === 'manchester' && loc !== 'manchester') show = false;
+        if (activeFilter === 'under300' && rate >= 300) show = false;
+
+        // Search query
+        if (query) {
+          const q = query.toLowerCase();
+          if (!name.includes(q) && !handle.includes(q) && !tags.includes(q) && !loc.includes(q)) show = false;
+        }
+
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      document.getElementById('results-count').textContent = visible + ' result' + (visible !== 1 ? 's' : '');
+    }
+
+    function showMore() {
+      const btn = document.querySelector('.btn-load');
+      btn.textContent = 'Loading...';
+      setTimeout(() => { btn.textContent = 'No more results'; btn.disabled = true; btn.style.opacity = '0.5'; }, 800);
+    }
+
+    // Animate cards on load
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.creator-card').forEach((card, i) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 80 + i * 60);
+      });
+    });
+  </script>
+</body>
+</html>
